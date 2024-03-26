@@ -24,7 +24,6 @@ public class GaleriaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galeria);
-
         archivos = fileList();
         rv1 = findViewById(R.id.rv1);
         rv1.setLayoutManager(new GridLayoutManager(this, 3));
@@ -78,27 +77,6 @@ public class GaleriaActivity extends AppCompatActivity {
                 * @param item: representa la opción del menú en la que el usuario hizo clic
                 * -----------------------------------------------------------------------------
                 */
-                /*@SuppressLint("NotifyDataSetChanged")
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    Set<Integer> datosEliminar = new HashSet<>();
-                    if (item.getItemId() == R.id.menu_opcion_eliminar) {
-                        //Obtener los elementos seleccionados del adaptador
-                        Toast.makeText(GaleriaActivity.this, "dato: " + setData, Toast.LENGTH_SHORT).show();
-                        for (int position : adaptadorFotos.elementosSeleccionados){
-                            String archivosEliminar = archivos[position];
-                            GaleriaActivity.this.deleteFile(archivosEliminar);
-                            datosEliminar.add(position);
-                        }
-                        adaptadorFotos.elementosSeleccionados.removeAll(datosEliminar);
-                        adaptadorFotos.notifyDataSetChanged();
-
-                        rv1.setAdapter(adaptadorFotos);
-
-                        mode.finish();
-                    }
-                    return true;
-                }*/
 
                @Override
                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -111,7 +89,6 @@ public class GaleriaActivity extends AppCompatActivity {
                    return false;
                }
 
-
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
                     setData.clear();
@@ -119,12 +96,9 @@ public class GaleriaActivity extends AppCompatActivity {
                     Toast.makeText(GaleriaActivity.this, "setData: " + setData, Toast.LENGTH_SHORT).show();
                     adaptadorFotos.notifyDataSetChanged();
                 }
-
-
             });
             return false;
         });
-
         rv1.setAdapter(adaptadorFotos);
     }
 }

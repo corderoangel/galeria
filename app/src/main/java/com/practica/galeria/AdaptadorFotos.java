@@ -6,11 +6,13 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -63,40 +65,43 @@ public class AdaptadorFotos extends RecyclerView.Adapter<AdaptadorFotos.Adaptado
     @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull AdaptadorFotos.AdaptadorFotosHolder holder, int position) {
-        holder.imprimir(position);
-        if(elementosSeleccionados.isEmpty()){
+        /*if(elementosSeleccionados.isEmpty()){
+            holder.imprimir(position);
             holder.itemView.setBackgroundResource(android.R.color.transparent);
-        }
+        }*/
+        holder.imprimir(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        holder.itemView.setBackgroundResource(elementosSeleccionados.contains(position) ? android.R.color.holo_red_dark : android.R.color.transparent);
 
         /*
         * seleccionar itemViews de la GaleriaActivity
         * */
-        holder.itemView.setOnLongClickListener(v -> {
-            if (elementosSeleccionados.isEmpty()) {
-                // Iniciar el modo de acción solo si no hay elementos seleccionados previamente.
-                mostrarMenu.iniciarActionMode(elementosSeleccionados);
-            }
+        holder.checkBox.setOnCheckedChangeListener(null); // Para evitar que el cambio de estado del CheckBox afecte a otros elementos
+        holder.checkBox.setChecked(elementosSeleccionados.contains(position));
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
 
-            /*
-             * seleccionar y deseleccionar elemento
-             */
-            toggleElementoSeleccionado(position);
-            if(elementosSeleccionados.contains(position)){
-                holder.itemView.setBackgroundResource(android.R.color.holo_red_dark);
-                Toast.makeText(context, "seleccionada foto #" + position, Toast.LENGTH_SHORT).show();
-            }else {
-                holder.itemView.setBackgroundResource(android.R.color.transparent);
-                Toast.makeText(context, "deseleccionada foto #" + position, Toast.LENGTH_SHORT).show();
+            @Override
+            public void onClick(View v) {
+                if (elementosSeleccionados.isEmpty()) {
+                    // Iniciar el modo de acción solo si no hay elementos seleccionados previamente.
+                    mostrarMenu.iniciarActionMode(elementosSeleccionados);
+                }
+
+                toggleElementoSeleccionado(position);
+                holder.itemView.setBackgroundResource(elementosSeleccionados.contains(position) ? android.R.color.holo_red_dark : android.R.color.transparent);
+
+                if(holder.checkBox.isChecked()){
+                    holder.itemView.setBackgroundResource(android.R.color.holo_red_dark);
+                    Toast.makeText(context, "seleccionada foto #" + position, Toast.LENGTH_SHORT).show();
+                }
+                if(!holder.checkBox.isChecked()){
+                    holder.itemView.setBackgroundResource(android.R.color.transparent);
+                    Toast.makeText(context, "deseleccionada foto #" + position, Toast.LENGTH_SHORT).show();
+                }
+
             }
-            return true;
         });
+
 
     }
 
@@ -125,16 +130,16 @@ public class AdaptadorFotos extends RecyclerView.Adapter<AdaptadorFotos.Adaptado
     }
 
     public class AdaptadorFotosHolder extends RecyclerView.ViewHolder {
+        CheckBox checkBox;
         ImageView iv1;
-        TextView tv1;
+
         public AdaptadorFotosHolder(@NonNull View itemView) {
             super(itemView);
-            tv1 = itemView.findViewById(R.id.tvFoto);
+            checkBox = itemView.findViewById(R.id.checkBox);
             iv1 = itemView.findViewById(R.id.ivFoto);
         }
 
         public void imprimir(int position){
-            tv1.setText("Nombre del archivo: " + archivos[position]);
             try {
                 FileInputStream fileInputStream = context.openFileInput(archivos[position]);
                 Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
@@ -146,5 +151,4 @@ public class AdaptadorFotos extends RecyclerView.Adapter<AdaptadorFotos.Adaptado
             }
         }
     }
-
 }

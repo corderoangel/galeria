@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public void tomarFoto(View v){
         //capturar foto utilizando la cámara del dispositivo
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-
        /*
         * esta linea de codigo se encuentra relacionada con el metodo
         * onActivityResult, donde el requestCode es CAPTURA_IMAGEN
